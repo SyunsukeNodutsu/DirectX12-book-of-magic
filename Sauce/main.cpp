@@ -10,19 +10,16 @@
 //  2021/05/29 画面クリア
 //  2021/05/30 ポリゴン描画
 //-----------------------------------------------------------------------------
-#include<Windows.h>
-#include<DirectXMath.h>
+#include <Windows.h>
+#include <DirectXMath.h>
 
-#ifdef _DEBUG
-#include<iostream>
-#endif
+#include <iostream>
+#include <tchar.h>
+#include <vector>
 
-#include<tchar.h>
-#include<vector>
-
-#include<d3d12.h>
-#include<dxgi1_6.h>
-#include<d3dcompiler.h>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <d3dcompiler.h>
 
 // リンカ リンク
 #pragma comment(lib,"d3d12.lib")
@@ -221,7 +218,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 特に指定なし
 	swapchainDesc.AlphaMode				= DXGI_ALPHA_MODE_UNSPECIFIED;
 	// ウィンドウ <-> フルスクリーン切り替え可能
-	swapchainDesc.Flags					= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	swapchainDesc.Flags					= 0/*DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH*/;
 
 	// スワップチェイン作成
 	hr = _dxgiFactory->CreateSwapChainForHwnd(_cmdQueue, hwnd, &swapchainDesc, nullptr, nullptr, (IDXGISwapChain1**)&_swapchain);
@@ -294,7 +291,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	resdesc.Flags				= D3D12_RESOURCE_FLAG_NONE;
 	resdesc.Layout				= D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-	//UPLOAD(確保は可能)
+	// UPLOAD(確保は可能)
 	ID3D12Resource* vertBuff = nullptr;
 	hr = _dev->CreateCommittedResource(&heapprop, D3D12_HEAP_FLAG_NONE, &resdesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertBuff));
@@ -337,37 +334,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ID3DBlob* errorBlob = nullptr;
 
 	// 頂点シェーダコンパイル 作成
-	hr = D3DCompileFromFile(L"BasicVertexShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+	hr = D3DCompileFromFile(L"Sauce/BasicVertexShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"BasicVS", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &_vsBlob, &errorBlob);
 
-	if (FAILED(hr)) {
+	if (FAILED(hr))
+	{
 		if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-			::OutputDebugStringA("ファイルが見当たりません");
+		{
+			assert(0 && "error not found shader file");
+		}
 		else
 		{
 			std::string errstr;
 			errstr.resize(errorBlob->GetBufferSize());
 			std::copy_n((char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), errstr.begin());
 			errstr += "\n";
-			OutputDebugStringA(errstr.c_str());
+			assert(0 && errstr.c_str());
 		}
 		return -1;
 	}
 
 	// ピクセルシェーダコンパイル 作成
-	hr = D3DCompileFromFile(L"BasicPixelShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+	hr = D3DCompileFromFile(L"Sauce/BasicPixelShader.hlsl", nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"BasicPS", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &_psBlob, &errorBlob);
 
-	if (FAILED(hr)) {
+	if (FAILED(hr))
+	{
 		if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-			::OutputDebugStringA("ファイルが見当たりません");
+		{
+			assert(0 && "error not found shader file");
+		}
 		else
 		{
 			std::string errstr;
 			errstr.resize(errorBlob->GetBufferSize());
 			std::copy_n((char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), errstr.begin());
 			errstr += "\n";
-			OutputDebugStringA(errstr.c_str());
+			assert(0 && errstr.c_str());
 		}
 		return -1;
 	}
@@ -454,11 +457,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	viewport.MaxDepth	= 1.0f;			// 深度最大値
 	viewport.MinDepth	= 0.0f;			// 深度最小値
 
+	// 切り抜き座標設定
 	D3D12_RECT scissorrect = {};
-	scissorrect.top		= 0;//切り抜き上座標
-	scissorrect.left	= 0;//切り抜き左座標
-	scissorrect.right	= scissorrect.left + window_width;//切り抜き右座標
-	scissorrect.bottom	= scissorrect.top + window_height;//切り抜き下座標
+	scissorrect.top		= 0;
+	scissorrect.left	= 0;
+	scissorrect.right	= scissorrect.left + window_width;
+	scissorrect.bottom	= scissorrect.top + window_height;
 
 	//--------------------------------------------------
 	// メッセージループ

@@ -11,7 +11,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BasicPixelShader.hlsl" />
-    <FxCompile Include="BasicVertexShader.hlsl" />
+    <FxCompile Include="Sauce\BasicPixelShader.hlsl">
+      <Filter>Sauce</Filter>
+    </FxCompile>
+    <FxCompile Include="Sauce\BasicVertexShader.hlsl">
+      <Filter>Sauce</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
