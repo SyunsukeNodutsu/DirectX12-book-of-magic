@@ -1,12 +1,16 @@
 //-----------------------------------------------------------------------------
 // File: BasicVertexShader.hlsl
 //
-// EditHistry:
-//  2021/05/29 新規作成
+// 基本的な頂点シェーダ
 //-----------------------------------------------------------------------------
+#include "BasicShaderHeader.hlsli"
 
-// 頂点シェーダ
-float4 BasicVS(float4 pos : POSITION) : SV_POSITION
+//頂点シェーダ
+Output BasicVS(float4 pos : POSITION, float2 uv : TEXCOORD)
 {
-	return pos;
+    Output output;
+    output.svpos = pos;
+    output.uv = uv;
+	
+    return output;
 }

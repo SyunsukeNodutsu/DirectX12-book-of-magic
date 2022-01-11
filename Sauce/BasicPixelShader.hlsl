@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 // File: BasicPixelShader.hlsl
 //
-// EditHistry:
-//  2021/05/29 新規作成
+// 基本的なピクセルシェーダ
 //-----------------------------------------------------------------------------
+#include "BasicShaderHeader.hlsli"
 
-// ピクセルシェーダ
-float4 BasicPS() : SV_TARGET
+//ピクセルシェーダ
+float4 BasicPS(Output input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    return float4(input.uv, 1.0f, 1.0f);
 }

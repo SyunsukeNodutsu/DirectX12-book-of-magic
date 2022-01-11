@@ -18,4 +18,9 @@
       <Filter>Sauce</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Sauce\BasicShaderHeader.hlsli">
+      <Filter>Sauce</Filter>
+    </None>
+  </ItemGroup>
 </Project>
