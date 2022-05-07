@@ -4,6 +4,9 @@
     <Filter Include="Sauce">
       <UniqueIdentifier>{1df67aa3-b0c0-40b0-9c60-55da87212930}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sauce\Utility">
+      <UniqueIdentifier>{7ca79af9-623f-4e28-a02f-63374175d675}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sauce\main.cpp">
@@ -22,5 +25,10 @@
     <None Include="Sauce\BasicShaderHeader.hlsli">
       <Filter>Sauce</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sauce\Utility\Utility.h">
+      <Filter>Sauce\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
